@@ -501,7 +501,7 @@ Usage:  brikget(imfile,unpackstr=np.int16,shp=None)  default shp: (-1,48,61,51)
                 elif first5[0] == 3:
                     unpackstr = np.float32
                 elif first5[0] == 5:
-                    unpackstr = np.complex32
+                    unpackstr = np.complex64  # np.complex32 removed in numpy 2
         dims.reverse()
         shp = [-1]+dims
     except IOError:
