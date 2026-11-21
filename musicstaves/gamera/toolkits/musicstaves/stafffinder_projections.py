@@ -213,7 +213,7 @@ with
 			if p >= threshold and not above:
 				above = True
 				if lastabove != None and i - lastabove > minstaffheight:
-					staffbreaks.append((i+lastbelow)/2)
+					staffbreaks.append((i+lastbelow)//2)
 					lastabove = i
 				elif lastabove == None:
 					lastabove = i
@@ -234,12 +234,12 @@ with
 		staffbegin = 0
 		for staffend in staffbreaks:
 			#minpeakheight += [threshold * max(avgproj[staffbegin:staffend])] \
-			minpeakheight += [peakthreshold * max(yproj[staffbegin:staffend])] \
+			minpeakheight += [peakthreshold * max(yproj[int(staffbegin):int(staffend)])] \
 							 * (staffend - staffbegin)
 			staffbegin = staffend
 		staffend = self.image.nrows
 		#minpeakheight += [threshold * max(avgproj[staffbegin:staffend])] \
-		minpeakheight += [peakthreshold * max(yproj[staffbegin:staffend])] \
+		minpeakheight += [peakthreshold * max(yproj[int(staffbegin):int(staffend)])] \
 						 * (staffend - staffbegin)
 
 		if debug > 1:
@@ -273,7 +273,7 @@ with
 			while dx == 0 and i < len(avgproj) - 1:
 				i += 1
 				dx = avgproj[i] - avgproj[i-1]
-			peaki = (lasti + i) / 2
+			peaki = (lasti + i) // 2
 			if lastdx > 0 and dx < 0 and \
 				   avgproj[peaki] > minpeakheight[i]:
 				peaks.append([peaki,avgproj[peaki]])
@@ -429,8 +429,8 @@ with
 	def __lowpass(self, vec, windowwidth):
 		avg = [0] * len(vec)
 		window = [0] * windowwidth
-		avgi = - windowwidth / 2
-		zeros = array(vec.typecode, [0] * (windowwidth/2))
+		avgi = - windowwidth // 2
+		zeros = array(vec.typecode, [0] * (windowwidth // 2))
 		for i,p in enumerate(vec + zeros):
 			del window[0]
 			window.append(p)
@@ -507,9 +507,9 @@ with
 	#     while the peakheight is to be taken from the raw profile
 	#
 	def __get_peakheight(self, ypos, yproj):
-		tolerance = self.staffline_height / 2
-		ymin = max([0, ypos - tolerance/2])
-		ymax = min([len(yproj) - 1, ypos + tolerance/2])
+		tolerance = self.staffline_height // 2
+		ymin = max(0, int(ypos - tolerance / 2))
+		ymax = min(len(yproj) - 1, int(ypos + tolerance / 2))
 		return max(yproj[ymin:ymax+1])
 
 	######################################################################

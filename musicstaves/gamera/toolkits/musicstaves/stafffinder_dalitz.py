@@ -426,13 +426,13 @@ processing.
             for g in groups:
                 if g.col_end - g.col_start + 1 > max_group_width / 2:
                     n = g.max_line - g.min_line + 1
-                    if num_hist.has_key(n):
+                    if n in num_hist:
                         num_hist[n] += 1
                     else:
                         num_hist[n] = 1
             max_count = 0
             estimated_num_lines = 0
-            for (n,c) in num_hist.iteritems():
+            for (n,c) in num_hist.items():
                 if c > max_count:
                     estimated_num_lines = n
                     max_count = c
