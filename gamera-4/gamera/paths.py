@@ -20,7 +20,7 @@
 #
 
 
-import os, sys, glob, imp  # Python standard library
+import os, sys, glob, importlib.util  # Python standard library
 from gamera.backport import dircache
 if 1:
    def dummy():
@@ -55,14 +55,11 @@ def get_directory_of_modules(dir, base=''):
    modules = glob.glob(os.path.join(dir, "*.py"))
    names = [os.path.basename(x).split('.')[0] for x in modules]
    mods = []
-   suffixes = imp.get_suffixes()
-   for i in suffixes:
-      if i[0] == '.py':
-         suffix = i
-         break
    for m, name in zip(modules, names):
       try:
-         module = imp.load_module(base + name, file(m, 'r'), m, suffix)
+         spec = importlib.util.spec_from_file_location(base + name, m)
+         module = importlib.util.module_from_spec(spec)
+         spec.loader.exec_module(module)
          mods.append(module)
       except Exception as e:
          print(e)
