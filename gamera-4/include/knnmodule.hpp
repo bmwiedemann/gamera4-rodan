@@ -24,6 +24,7 @@
 #define KWM12172002_knnmodule
 
 #include <Python.h>
+#include "pycompat.hpp"
 #include "knn.hpp"
 
 using namespace Gamera;
@@ -48,11 +49,11 @@ enum DistanceType {
 inline int image_get_fv(PyObject* image, double** buf, Py_ssize_t* len) {
 	ImageObject* x = (ImageObject*)image;
 	
-	if (PyObject_CheckReadBuffer(x->m_features) < 0) {
+	if (!GAMERA_PyObject_CheckReadBuffer(x->m_features)) {
 		return -1;
 	}
-	
-	if (PyObject_AsReadBuffer(x->m_features, (const void**)buf, len) < 0) {
+
+	if (GAMERA_PyObject_AsReadBuffer(x->m_features, (const void**)buf, len) < 0) {
 		PyErr_SetString(PyExc_TypeError, "knn: Could not use image as read buffer.");
 		return -1;
 	}

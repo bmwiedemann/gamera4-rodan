@@ -22,6 +22,7 @@
 #define kwm01102002_to_string
 
 #include <Python.h>
+#include "../pycompat.hpp"
 #include "gamera.hpp"
 #include "vigra/resizeimage.hxx"
 #include "image_utilities.hpp"
@@ -209,11 +210,11 @@ PyObject* to_string(T& m) {
 }
 
 static char *get_writable_buffer(PyObject *py_buffer, size_t nrows, size_t ncols) {
-	if (PyObject_CheckReadBuffer(py_buffer) == 1) {
+	if (GAMERA_PyObject_CheckReadBuffer(py_buffer) == 1) {
 		// Old Buffer Protocol
 		char *buffer;
 		Py_ssize_t buffer_len;
-		PyObject_AsWriteBuffer(py_buffer, (void **)&buffer, &buffer_len);
+		GAMERA_PyObject_AsWriteBuffer(py_buffer, (void **)&buffer, &buffer_len);
 		
 		if ((size_t)buffer_len != nrows * ncols * 3 || buffer == nullptr) {
 			printf("The image passed to to_buffer is not of the correct size.\n");

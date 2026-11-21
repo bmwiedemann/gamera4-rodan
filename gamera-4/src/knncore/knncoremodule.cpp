@@ -26,6 +26,7 @@
 */
 
 #include <Python.h>
+#include "pycompat.hpp"
 #include "gameramodule.hpp"
 #include "knn.hpp"
 #include "knncoremodule.hpp"
@@ -1373,12 +1374,12 @@ static PyObject* knn_set_selections(PyObject* self, PyObject* args) {
 	Py_ssize_t len;
 	int *selections;
 	
-	if (!PyObject_CheckReadBuffer(array)) {
+	if (!GAMERA_PyObject_CheckReadBuffer(array)) {
 		PyErr_SetString(PyExc_RuntimeError, "knn: Error getting selection array buffer.");
 		return nullptr;
 	}
-	
-	if ((PyObject_AsReadBuffer(array, (const void**)&selections, &len) != 0)) {
+
+	if ((GAMERA_PyObject_AsReadBuffer(array, (const void**)&selections, &len) != 0)) {
 		PyErr_SetString(PyExc_RuntimeError, "knn: Error getting selection array buffer.");
 		return nullptr;
 	}
@@ -1410,11 +1411,11 @@ static PyObject* knn_set_weights(PyObject* self, PyObject* args) {
 	}
 	Py_ssize_t len;
 	double* weights;
-	if (!PyObject_CheckReadBuffer(array)) {
+	if (!GAMERA_PyObject_CheckReadBuffer(array)) {
 		PyErr_SetString(PyExc_RuntimeError, "knn: Error getting weight array buffer.");
 		return nullptr;
 	}
-	if ((PyObject_AsReadBuffer(array, (const void**)&weights, &len) != 0)) {
+	if ((GAMERA_PyObject_AsReadBuffer(array, (const void**)&weights, &len) != 0)) {
 		PyErr_SetString(PyExc_RuntimeError, "knn: Error getting weight array buffer.");
 		return nullptr;
 	}
